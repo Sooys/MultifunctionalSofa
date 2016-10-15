@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String APP_PREFERENCES = "settings";
     public static final String APP_PREFERENCES_COUNTER = "counter";
     public static final String APP_OPENED_FUNCTIONS_COUNTER = "openedFunctions";
-    public static final String APP_FUNCTIONS_CLOSED = "functionsClosed";
+
     private static int openedFunctions = 0;
     private SharedPreferences Settings;
 
@@ -34,11 +34,6 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(MainActivity.this, AdditionalActivity.class);
         func = (TextView)findViewById(R.id.textView7);
 
-        if(Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER,0) == 0){
-            editor.putBoolean(APP_FUNCTIONS_CLOSED, true).commit();
-        }else{
-            editor.putBoolean(APP_FUNCTIONS_CLOSED, false).commit();
-        }
 
     }
 
@@ -58,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER, 0) < AdditionalActivity.getSizeOfFunctionsArray()) {
                 openedFunctions++;
-                editor.putBoolean(APP_FUNCTIONS_CLOSED, false).commit();
+
 
                 Toast toast = Toast.makeText(getApplicationContext(), "Вы открыли новую функцию!", Toast.LENGTH_SHORT);
                 toast.show();
@@ -105,8 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
             openedFunctions = Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER, 0);
 
-            if(Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER,0) > 0)
-            editor.putBoolean(APP_FUNCTIONS_CLOSED, false).commit();
 
         }
 

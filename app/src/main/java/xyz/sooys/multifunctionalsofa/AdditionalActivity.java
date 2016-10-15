@@ -5,9 +5,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.widget.TextView;
 
-import static xyz.sooys.multifunctionalsofa.MainActivity.APP_FUNCTIONS_CLOSED;
+
 import static xyz.sooys.multifunctionalsofa.MainActivity.APP_OPENED_FUNCTIONS_COUNTER;
 import static xyz.sooys.multifunctionalsofa.MainActivity.APP_PREFERENCES;
 
@@ -30,18 +31,19 @@ public class AdditionalActivity extends AppCompatActivity {
         SharedPreferences Settings;
         Settings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
+            for (int i = 0; i < functionsArray.length; i++)
+                if(i < Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER, 0))
 
-        if(Settings.getBoolean(APP_FUNCTIONS_CLOSED, false)){
-            func.setText("Закрыто");
-            func.setTextColor(Color.RED);
-        }else{
-            for (int i = 0; i < Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER, 0); i++)
-                text+=functionsArray[i] + "\n";
+                     text += functionsArray[i] +"<br>";
 
-            func.setText(text);
+                else
+                    text += "<font color='red'>закрыто</font> <br>";
+
+
+        func.setText(Html.fromHtml(text));
         }
 
-    }
+
 
 
     public static int getSizeOfFunctionsArray (){
