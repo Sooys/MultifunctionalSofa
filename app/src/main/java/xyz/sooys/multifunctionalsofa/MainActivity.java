@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String APP_PREFERENCES = "settings";
     public static final String APP_PREFERENCES_COUNTER = "counter";
+    public static final String APP_OPENED_FUNCTIONS_COUNTER = "openedFunctions";
+    private static int openedFunctions = 0;
     private SharedPreferences Settings;
 
     private TextView func;
@@ -20,11 +22,14 @@ public class MainActivity extends AppCompatActivity {
 
     public int scount = 51;
 
+
+    private static SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Settings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        editor = Settings.edit();
         intent = new Intent(MainActivity.this, AdditionalActivity.class);
         func = (TextView)findViewById(R.id.textView7);
     }
@@ -40,9 +45,22 @@ public class MainActivity extends AppCompatActivity {
         clicker.setText(Integer.toString(--scount));
         if ((scount <= 0)) {
             scount = 51;
-            Toast toast = Toast.makeText(getApplicationContext(), "Вы открыли новую функцию!", Toast.LENGTH_SHORT);
-            toast.show();
-            intent.putExtra("func", "На нем можно спать");
+
+
+            if(Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER, 0) < AdditionalActivity.getSizeOfFunctionsArray()) {
+                openedFunctions++;
+                Toast toast = Toast.makeText(getApplicationContext(), "Вы открыли новую функцию!", Toast.LENGTH_SHORT);
+                toast.show();
+                System.out.println(openedFunctions);
+                if (Settings.contains(APP_OPENED_FUNCTIONS_COUNTER))
+                    editor.putInt(APP_OPENED_FUNCTIONS_COUNTER, openedFunctions);
+                else
+                    editor.putInt(APP_OPENED_FUNCTIONS_COUNTER, 0);
+
+                editor.apply();
+                editor.commit();
+            }
+
         }
     }
 
@@ -50,9 +68,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         // Запоминаем данные
-        SharedPreferences.Editor editor = Settings.edit();
+
         editor.putInt(APP_PREFERENCES_COUNTER, scount);
+        editor.putInt(APP_OPENED_FUNCTIONS_COUNTER, openedFunctions);
+
         editor.apply();
+        editor.commit();
+
+
+
     }
 
     @Override
@@ -66,6 +90,13 @@ public class MainActivity extends AppCompatActivity {
             TextView clicker = (TextView)findViewById(R.id.textView3);
             clicker.setText(Integer.toString(scount));
         }
+        if (Settings.contains(APP_OPENED_FUNCTIONS_COUNTER)) {
+
+            openedFunctions = Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER, 0);
+
+        }
+
+
     }
 
 }
