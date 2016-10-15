@@ -2,10 +2,12 @@ package xyz.sooys.multifunctionalsofa;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import static xyz.sooys.multifunctionalsofa.MainActivity.APP_FUNCTIONS_CLOSED;
 import static xyz.sooys.multifunctionalsofa.MainActivity.APP_OPENED_FUNCTIONS_COUNTER;
 import static xyz.sooys.multifunctionalsofa.MainActivity.APP_PREFERENCES;
 
@@ -28,10 +30,17 @@ public class AdditionalActivity extends AppCompatActivity {
         SharedPreferences Settings;
         Settings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
 
-        for (int i = 0; i < Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER, 0); i++)
-            text+=functionsArray[i] + "\n";
 
-        func.setText(text);
+        if(Settings.getBoolean(APP_FUNCTIONS_CLOSED, false)){
+            func.setText("Закрыто");
+            func.setTextColor(Color.RED);
+        }else{
+            for (int i = 0; i < Settings.getInt(APP_OPENED_FUNCTIONS_COUNTER, 0); i++)
+                text+=functionsArray[i] + "\n";
+
+            func.setText(text);
+        }
+
     }
 
 
